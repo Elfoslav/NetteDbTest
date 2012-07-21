@@ -1,0 +1,41 @@
+{block content}
+{var $test = $presenter->context->createFood()}
+<div id="content">
+    {*foreach $orders as $order}
+    <h3>Order {$order->id}</h3>
+    <ul>{var $order_food = $order->related("order_food")}
+	{var $sortedFood = array()}
+	{foreach $order_food as $of}
+	{var $orderedFood = $of->ref("food")}
+	{var $sortedFood[] = $orderedFood->name}
+	<li>{$orderedFood->name} : {$of->food_quantity}</li>
+	{/foreach}
+	
+    </ul>
+    Ordered:
+    <ul>
+	<?php natsort($sortedFood) ?>
+	{foreach $sortedFood as $sf}
+	<li>{$sf}</li>
+	{/foreach}
+    </ul>
+    {/foreach*}
+    
+{*This works}    {foreach $categories as $c}
+	{$c->name} - 
+	{foreach $c->related("food") as $f}
+	    {$f->name}
+	{/foreach}
+	<br>
+    {/foreach}
+{*}
+{*This works}   {foreach $food as $f}
+	{$f->name} in
+	{var $category = $categories->get($f->category_id)}
+	{if ($category = $f->ref("categories", "category_id"))}{$category->name}{/if}
+	<br>
+    {/foreach}
+{*}
+</div>
+
+{/block}
